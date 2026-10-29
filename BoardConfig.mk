@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/huawei/berkeley
+DEVICE_PATH := device/huawei/blanc
 
 # Partitions
 BOARD_SUPER_PARTITION_SIZE := 4848615424
@@ -16,11 +16,11 @@ TARGET_SCREEN_DENSITY := 420
 
 # ODM
 ODM_MANIFEST_SKUS := \
-    BKL-L04 \
-    BKL-L09
+    BLA-L09 \
+    BLA-L29
 
-ODM_MANIFEST_BKL-L04_FILES := $(DEVICE_PATH)/odm/manifest_BKL-L04.xml
-ODM_MANIFEST_BKL-L09_FILES := $(DEVICE_PATH)/odm/manifest_BKL-L09.xml
+ODM_MANIFEST_BLA-L09_FILES := $(DEVICE_PATH)/odm/manifest_BLA-L09.xml
+ODM_MANIFEST_BLA-L29_FILES := $(DEVICE_PATH)/odm/manifest_BLA-L29.xml
 
 # Include the proprietary files BoardConfig.
-include vendor/huawei/berkeley/BoardConfigVendor.mk
+-include vendor/huawei/blanc/BoardConfigVendor.mk

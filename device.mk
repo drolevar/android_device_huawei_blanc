@@ -23,11 +23,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/fingerprint.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/fingerprint.kl
 
 # Overlay
-DEVICE_PACKAGE_OVERLAYS += \
-    $(LOCAL_PATH)/overlay-lineage
-
 PRODUCT_PACKAGES += \
-    FrameworksOverlayBKL
+    FrameworksOverlayBLA
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
@@ -38,4 +35,4 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/android.hardware.sensor.unavailable.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/android.hardware.sensor.unavailable.xml
 
 # Inherit from the proprietary files makefile.
-$(call inherit-product, vendor/huawei/berkeley/berkeley-vendor.mk)
+$(call inherit-product-if-exists, vendor/huawei/blanc/blanc-vendor.mk)

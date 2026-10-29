@@ -4,6 +4,6 @@
 //
 
 runtime_resource_overlay {
-    name: "FrameworksOverlayBKL",
+    name: "FrameworksOverlayBLA",
     device_specific: true,
 }

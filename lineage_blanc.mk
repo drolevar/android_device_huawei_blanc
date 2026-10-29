@@ -8,19 +8,19 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/non_ab_device.mk)
 
-# Inherit from berkeley device
-$(call inherit-product, device/huawei/berkeley/device.mk)
+# Inherit from blanc device
+$(call inherit-product, device/huawei/blanc/device.mk)
 
 # Inherit some common Lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
-PRODUCT_NAME := lineage_berkeley
-PRODUCT_DEVICE := berkeley
+PRODUCT_NAME := lineage_blanc
+PRODUCT_DEVICE := blanc
 PRODUCT_MANUFACTURER := HUAWEI
-PRODUCT_BRAND := HONOR
-PRODUCT_MODEL := BKL-L09
+PRODUCT_BRAND := HUAWEI
+PRODUCT_MODEL := BLA-L29
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    BuildDesc="BKL-L09-user 10 HUAWEIBKL-L09 177C432 release-keys" \
-    BuildFingerprint=HUAWEI/BKL-L09/HWBKL:10/HUAWEIBKL-L09/10.0.0.177C432:user/release-keys \
-    DeviceProduct=BKL-L09
+    BuildDesc="BLA-L29-user 10 HUAWEIBLA-L29 202C432 release-keys" \
+    BuildFingerprint=HUAWEI/BLA-L29/HWBLA:10/HUAWEIBLA-L29/10.0.0.202C432:user/release-keys \
+    DeviceProduct=BLA-L29
