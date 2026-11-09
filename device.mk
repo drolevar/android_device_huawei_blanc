@@ -34,5 +34,6 @@ PRODUCT_SOONG_NAMESPACES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/android.hardware.sensor.unavailable.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/android.hardware.sensor.unavailable.xml
 
-# Inherit from the proprietary files makefile.
-$(call inherit-product-if-exists, vendor/huawei/blanc/blanc-vendor.mk)
+# The product requires a reviewed BLA blob extraction; a missing vendor tree
+# must fail configuration instead of producing a silently incomplete product.
+$(call inherit-product, vendor/huawei/blanc/blanc-vendor.mk)

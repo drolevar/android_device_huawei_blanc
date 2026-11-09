@@ -21,6 +21,4 @@ PRODUCT_BRAND := HUAWEI
 PRODUCT_MODEL := BLA-L29
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    BuildDesc="BLA-L29-user 10 HUAWEIBLA-L29 202C432 release-keys" \
-    BuildFingerprint=HUAWEI/BLA-L29/HWBLA:10/HUAWEIBLA-L29/10.0.0.202C432:user/release-keys \
     DeviceProduct=BLA-L29

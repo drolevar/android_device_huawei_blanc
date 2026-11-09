@@ -1,3 +1,6 @@
+# DONOR RECIPE ONLY: this is not a BLA-L29 EMUI 12 .225 extraction list.
+# BKL camera/audio/display/touchscreen entries need a BLA inventory and review.
+# Original donor provenance is retained below; see README.md before extraction.
 # All unpinned blobs below are extracted from BKL-AL00-user 102.0.0 HUAWEIBKL-AL00 263-CHN-LGRP1 release-keys
 
 # Audio Configs

@@ -5,7 +5,9 @@
 
 DEVICE_PATH := device/huawei/blanc
 
-# Partitions
+# Donor geometry inherited from Berkeley. This is NOT a measured BLA-L29
+# EMUI 12 .225 capacity. Replace only after the firmware inventory described
+# in README.md; this preparation branch is not an installable device port.
 BOARD_SUPER_PARTITION_SIZE := 4848615424
 
 # Include the common OEM chipset BoardConfig.
@@ -22,5 +24,5 @@ ODM_MANIFEST_SKUS := \
 ODM_MANIFEST_BLA-L09_FILES := $(DEVICE_PATH)/odm/manifest_BLA-L09.xml
 ODM_MANIFEST_BLA-L29_FILES := $(DEVICE_PATH)/odm/manifest_BLA-L29.xml
 
-# Include the proprietary files BoardConfig.
--include vendor/huawei/blanc/BoardConfigVendor.mk
+# Require the proprietary files BoardConfig from the reviewed BLA extraction.
+include vendor/huawei/blanc/BoardConfigVendor.mk
