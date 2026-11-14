@@ -31,9 +31,9 @@ configuration explicitly.
 
 | Area | Existing source | Evidence needed before an image build |
 | --- | --- | --- |
-| Partition layout | `BOARD_SUPER_PARTITION_SIZE = 4848615424` comes from Berkeley; common fstab expects logical partitions | BLA `.225` by-name map, capacities, stock fstab, and logical-partition metadata if present |
+| Partition layout | Super capacity reconciled to 5771362304 bytes from BLA stock LP metadata; common fstab still needs review | Complete partition/OTA layout review; see [capture evidence](docs/BLA-225-EVIDENCE.md) |
 | Boot packaging | Common/hardware trees describe split kernel, normal ramdisk, recovery ramdisk, and recovery vendor images | Header inspection of the exact stock and working recovery images, including AVB/footer limits |
-| Camera and ODM init | `init/init.hisi.odm.rc` still contains `CameraDaemon ... BKL` and BKL SKU conditions | BLA service arguments, SKU properties, libraries, calibration/configuration paths |
+| Camera and ODM init | Stock `BLANC` camera argument and BLA L29/L09 modem counts applied; donor permissions retained | Platform groups, libraries, calibration/configuration paths and runtime validation |
 | Device blobs | `proprietary-files.txt` is a BKL-AL00 `.263` donor list, with BKL/BKLY/BERK entries | Complete, hash-recorded BLA-L29 `.225` extraction and ELF dependency audit |
 | Shared vendor blobs | Common tree contains its own donor extraction recipe and fixups | Verify each common blob against the same BLA firmware; a common SoC does not prove binary equivalence |
 | Metadata and encryption | Common fstab maps `patch` to `/metadata` and marks it formattable | Confirm partition ownership and encryption/keymaster requirements before enabling that layout |

@@ -72,14 +72,14 @@ on boot
     write /sys/class/irda/irda_maxim/power_cfg 1
     chown system system /sys/class/irda/irda_chip/ir_chip_type
 
-on property:ro.boot.product.hardware.sku=BKL-L09
+on property:ro.boot.product.hardware.sku=BLA-L29
     setprop ro.odm.config.modem_number 2
 
-on property:ro.boot.product.hardware.sku=BKL-L04
-    symlink /odm/hw_odm/BKL-L04 /mnt/hw_odm
+on property:ro.boot.product.hardware.sku=BLA-L09
+    setprop ro.odm.config.modem_number 1
 
 # Service add below.
-service CameraDaemon /vendor/bin/CameraDaemon kirin970 BKL
+service CameraDaemon /vendor/bin/CameraDaemon kirin970 BLANC
     class main
     user media
     group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm system

@@ -5,10 +5,10 @@
 
 DEVICE_PATH := device/huawei/blanc
 
-# Donor geometry inherited from Berkeley. This is NOT a measured BLA-L29
-# EMUI 12 .225 capacity. Replace only after the firmware inventory described
-# in README.md; this preparation branch is not an installable device port.
-BOARD_SUPER_PARTITION_SIZE := 4848615424
+# BLA-L29 EMUI 12 .225: measured super capacity, confirmed by stock LP
+# metadata block_devices[super].size and super_device.total_size.
+# Capture provenance and limitations: docs/BLA-225-EVIDENCE.md.
+BOARD_SUPER_PARTITION_SIZE := 5771362304
 
 # Include the common OEM chipset BoardConfig.
 include device/huawei/kirin970-common/BoardConfigCommon.mk
