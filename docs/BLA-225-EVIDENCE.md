@@ -40,6 +40,117 @@ in the captured files; no L09 handset was tested.
 `ro.comp.hl.product_cust_version.real=BLA-L29-CUST 102.0.0.4(C432)`.
 Neither string is substituted into a fabricated build fingerprint.
 
+## ODM extraction candidate
+
+The original BKL device recipe at `f205195` lists 994 files; only 148 exist in
+this BLA original-filesystems view (846 absent). The replacement selects **1119
+regular stock ODM files** by their actual paths, not by renaming donor entries.
+Each entry in `proprietary-files.txt` pins the raw SHA-1 expected by extract-utils;
+126 entries additionally pin the observed fixed-output SHA-1. Original donor
+ancestry and copyright remain in Git history and the extraction script.
+
+Selection includes audio (93), camera data (243), declared L09/L29 carrier data
+(714), display (12), firmware (15), GPS configs (4), media/NFC (5), regular
+native files/GPS daemon (21), `phone.prop` (1), SWS (6), TA (4) and thermal (1).
+This captures available alternatives, including BA09 audio and multiple display,
+sensor, touchscreen and TA variants; presence is not evidence of installed
+hardware or a reason to advertise another SKU. L29 and L09 are the only declared
+SKUs. The five camera HAL filenames are the actual `BLANC` IMX319/IMX386HYBIRD
+and `m.BLANC` files in stock `odm/lib64/hwcam/`.
+
+The selection deliberately excludes:
+
+- `odm/etc/init/*` and `odm/etc/vintf/*`: source owns init and SKU manifests.
+  Stock init also contains identity actions and an IR HAL service override;
+  those were not imported wholesale.
+- Stock `etc/permissions`, build/local properties and SELinux contexts: product
+  source owns features, identity and policy; do not copy stock platform policy
+  into the new platform. `phone.prop` is retained because Huawei libinit parses
+  this device radio/connectivity database.
+- `cust/`, `special_cust/`, A09/AL00/TL00 carrier directories, README files and
+  absolute compatibility symlinks. These are unreviewed regional overlays,
+  undeclared SKUs, documentation or links requiring separate integration.
+- `libMegviiUnlock.so` and `libmegface.so`: the selected extract-utils default
+  prohibited-file check rejects their actual stock signatures. A first scratch
+  extraction stopped there. The candidate omits them rather than requiring an
+  extraction override; face unlock and any remaining dependencies are unresolved.
+
+Media/NFC retain the donor destination remaps used by the product. Media keeps
+`TRYSRCFIRST`, selecting the measured ODM file even when vendor also contains a
+same-name file. NXP vendor-extension source
+`hardware/nxp/nfc/vendor_extns/libnfc_vendor_extn/src/common/utils/phNxpConfig.cc`
+has the default RF path `/system/vendor/libnfc-nxp_RF.conf`; the inherited
+vendor-root destination is retained pending NFC runtime review. Other NFC
+configs go to `vendor/etc/`.
+
+Stock ODM `gps.default.so` and `gps47531.default.so` collide with the common
+vendor modules by basename. Both use `MODULE_SUFFIX=_blanc`, preserving their
+ODM install paths and stems. Both stock SONAMEs are
+`gps.huaweik3v3android.so`; `FIX_SONAME` changes each to its installed filename.
+No ELF-check or dependency-generation bypass is added.
+
+## Fixup audit
+
+The explicit camera fixup tuple contains 120 actual BLA paths: 118 declared
+GB2312/gb2312 and two XML declarations lacking encoding. The inherited byte-level
+repairs allow host XML parsing without transcoding stock bytes. They also fix
+the six `L-R-Ev` occurrences and the malformed comment ending in
+`motiondetection/mdconfig.xml`. ISO-8859-1 declaration replacement is inherited
+parser compatibility behavior, not proof of correct Chinese text interpretation
+or equivalent runtime camera behavior. The obsolete `--L-R-Ev` replacement was
+removed because this BLA capture contains no such occurrence.
+
+The existing HDR XML fixes remain: encoding declaration, mismatched
+`subverison` closing tag, and malformed comment endings. All **243 selected XML
+files** parse after extraction, including the 182 selected camera XML files.
+The remaining 61 camera files are other data formats.
+
+Only three BLA ODM libraries need the inherited
+`libstdc++.so` to `libstdc++_vendor.so` DT_NEEDED replacement, confirmed with
+`readelf -d` on the untouched inputs:
+
+| Original `odm/lib64/` file | SHA-256 |
+| --- | --- |
+| `libarcsoft_beautyshot.so` | `0179de082b10429fb2a06db6420446c01df16cd9db34ffe0295ad0a8413a72d2` |
+| `libmrc_cg_beauty.so` | `53fb2b645f1081ce7b4c5993b973e91b4509f2e7d5c4053be291e07cd218da49` |
+| `libvidhance.so` | `a3b2c24f3166d02c0467f06359eb4c67b284ab3044a13137c723a54f731bc5d5` |
+
+The three absent donor library paths are removed from the fixup tuple. Native
+instruction patches in the common project are outside this device change.
+
+## Offline verification record
+
+Extract-utils commit: `78ba5d58c4b06712e18bb387a2a72eac8fbc8d70`, with its
+selected `patchelf-0_18` (binary SHA-256
+`b699cb82300dfd08ea6c895d8829b46bea970cfa737fa34188d8256ca89404e5`).
+A redirected module context wrote only under ignored
+`cache/blanc-225-device-audit/`, never the syncing Android checkout. The actual
+DiskSource copy, hash checking, fixups and vendor makefile/Blueprint generation
+completed for all 1119 entries. Every raw/fixed hash matched; all 243 XMLs parsed.
+126 files changed: 120 camera XMLs, one HDR XML, three dependency replacements
+and two GPS SONAME repairs. Nine source/host fixture tests pass; the BLA camera
+and GPS regressions were observed failing before their configuration changes.
+The workspace automation suite also passed all 64 tests.
+
+There were no module-name or install-destination collisions against the main
+task's common worktree candidate whose list SHA-256 was
+`3afa1371947fdd7e935a4b598b5150b25d49b70be8cf947a7d6104ccf683febe`.
+This is an observation of that candidate, not a new common source selection.
+The local audit contains per-file SHA-256 manifests; their hashes are:
+
+- `selected-originals.sha256`:
+  `0690e635532aa5873721c7a4939137eb59c0f21a8c69419b1477504f616d1a4f`
+- `selected-outputs.sha256`:
+  `8770871add949cff38340550d3bbba23515272ac95053b516759c348fd0539ec`
+- Generated device `Android.bp`:
+  `d51dc603ebc7ed364ddf5c25da0bc4c59952258d2d7eef356ad991fa6df146ea`
+
+Stock `vendor/etc/vintf/manifest.xml` declares target level **3**. Copying stock
+manifests was intentionally avoided; target-platform VINTF reconciliation remains
+separate. Complete ELF dependency resolution (including availability of the
+renamed C++ compatibility library), SELinux, kernel compatibility, permissions
+and omitted stock init actions remain unvalidated. Generating Blueprint with
+ELF checks enabled does not execute Soong's ELF checks or prove compilation.
 No compilation, boot or hardware success is established by these changes.
 
 SPDX-FileCopyrightText: The LineageOS Project

@@ -2,8 +2,9 @@
 
 **Status: source preparation, not a build- or boot-validated ROM.** The target
 handset is BLA-L29 on EMUI 12 `.225`, with an unlocked bootloader and working
-TWRP reported by its owner on 2026-11-09. No current partition capture, stock
-image set, or proprietary binary extraction is included in this repository.
+TWRP reported by its owner on 2026-11-09. A private stock capture now supplies
+the [measured geometry, init and extraction evidence](docs/BLA-225-EVIDENCE.md).
+Stock images and proprietary binary bytes are not included in this repository.
 
 ## Source ancestry and checkout
 
@@ -34,10 +35,10 @@ configuration explicitly.
 | Partition layout | Super capacity reconciled to 5771362304 bytes from BLA stock LP metadata; common fstab still needs review | Complete partition/OTA layout review; see [capture evidence](docs/BLA-225-EVIDENCE.md) |
 | Boot packaging | Common/hardware trees describe split kernel, normal ramdisk, recovery ramdisk, and recovery vendor images | Header inspection of the exact stock and working recovery images, including AVB/footer limits |
 | Camera and ODM init | Stock `BLANC` camera argument and BLA L29/L09 modem counts applied; donor permissions retained | Platform groups, libraries, calibration/configuration paths and runtime validation |
-| Device blobs | `proprietary-files.txt` is a BKL-AL00 `.263` donor list, with BKL/BKLY/BERK entries | Complete, hash-recorded BLA-L29 `.225` extraction and ELF dependency audit |
+| Device blobs | `proprietary-files.txt` selects 1119 stock BLA ODM inputs with raw and applicable fixed-output hashes; offline extraction and makefile generation checked | Complete ELF dependency, platform compatibility and runtime audit; see selection exclusions in the evidence document |
 | Shared vendor blobs | Common tree contains its own donor extraction recipe and fixups | Verify each common blob against the same BLA firmware; a common SoC does not prove binary equivalence |
 | Metadata and encryption | Common fstab maps `patch` to `/metadata` and marks it formattable | Confirm partition ownership and encryption/keymaster requirements before enabling that layout |
-| VINTF and policy | Common tree uses target FCM level 5 and legacy HALs | Check against the selected Lineage 24 matrices, vendor interfaces, and SELinux policy |
+| VINTF and policy | Stock vendor reports target level 3; donor common source used level 5 and legacy HALs | Reconcile against the selected Lineage 24 matrices, vendor interfaces, and SELinux policy; stock manifests are excluded from this blob list |
 
 The donor sizes, mount rules, and init services remain visible for review;
 they are **not instructions to repartition, format, or flash the handset**.
@@ -46,14 +47,13 @@ calibration, and regional modem configuration can differ structurally.
 
 ## Next device-specific work
 
-1. Obtain a read-only inventory from stock `.225` and the working recovery.
-   Record the complete firmware identifiers, kernel release/configuration,
-   partition names and sizes, boot-image headers, VINTF manifests, fstab,
-   encryption properties, and file hashes. Keep raw captures outside public Git.
-2. Replace the donor blob list and ODM init using that inventory. Retain source
-   attribution for any donor fixup, but apply a binary patch only to a verified
-   input hash and after checking its dependencies.
-3. Generate `vendor/huawei/blanc` and `vendor/huawei/kirin970-common` privately
+1. Complete the private stock `.225` evidence review, including the complete
+   displayed firmware identity, boot-image headers, fstab and encryption. Keep
+   raw captures outside public Git.
+2. Audit remaining donor init permissions, omitted stock init actions, platform
+   groups and native dependencies. The BLA list and inherited fixups are a
+   source candidate, not proof that every stock component should ship or works.
+3. Generate and integrate `vendor/huawei/blanc` and `vendor/huawei/kirin970-common` privately
    with the extract-utils version recorded in the resolved source lock.
    Missing files, wrong architecture,
    unresolved ELF dependencies, and unreviewed donor entries are build blockers.
@@ -65,6 +65,21 @@ calibration, and regional modem configuration can differ structurally.
 
 No full Lineage 24 source sync, Android compilation, device boot, hardware test,
 or official LineageOS charter qualification is asserted by this branch.
+
+## Host regression checks
+
+From this device repository, with the selected extract-utils checkout supplied
+explicitly for an isolated worktree:
+
+```sh
+PYTHONPATH=/absolute/android/root/tools/extract-utils python3 -B -m unittest discover -s tests -v
+```
+
+These tests use synthetic XML and host-built ELF fixtures. They require `cc`,
+`readelf` and extract-utils' selected `patchelf` prebuilt; they do not access a
+handset or read proprietary firmware. They check XML repairs, generated media/NFC
+copy rules, media source priority, GPS module naming, default extraction policy
+and the retained native dependency replacements.
 
 SPDX-FileCopyrightText: The LineageOS Project
 
