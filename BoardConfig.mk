@@ -13,6 +13,13 @@ BOARD_SUPER_PARTITION_SIZE := 5771362304
 # Include the common OEM chipset BoardConfig.
 include device/huawei/kirin970-common/BoardConfigCommon.mk
 
+# Keep warning/notice/info messages in the console (including pstore when its
+# backend is registered) during bring-up. The inherited level 4 hides these.
+# This changes console filtering, not printk's ring buffer or ADB permissions.
+ifneq ($(filter userdebug eng,$(TARGET_BUILD_VARIANT)),)
+BOARD_KERNEL_CMDLINE := $(filter-out loglevel=%,$(BOARD_KERNEL_CMDLINE)) loglevel=7
+endif
+
 # Display
 TARGET_SCREEN_DENSITY := 420
 

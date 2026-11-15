@@ -10,6 +10,18 @@ $(call inherit-product, device/huawei/kirin970-common/common.mk)
 # Override the common donor's launch API without changing its VNDK selection.
 PRODUCT_SHIPPING_API_LEVEL := 26
 
+# Debug builds retain Android startup logs once encrypted /data is available.
+# Use the platform logcatd service; its normal init gate prevents early writes.
+# Eight 1 MiB rotated files plus the active file; kernel/pstore covers earlier
+# failures only when its backend is registered. Do not change ADB authentication.
+ifneq ($(filter userdebug eng,$(TARGET_BUILD_VARIANT)),)
+PRODUCT_SYSTEM_PROPERTIES += \
+    logd.logpersistd=logcatd \
+    logd.logpersistd.buffer=main,system,crash,events,kernel \
+    logd.logpersistd.size=8 \
+    logd.logpersistd.rotate_kbytes=1024
+endif
+
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi

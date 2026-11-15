@@ -101,6 +101,28 @@ and compiler/input receipt outside this source tree.
 Android ARM/ARM64 provider builds, linker namespaces, heap IDs/flags, protected
 buffers, Huawei IOMMU behavior, composer and display still need separate checks.
 
+## Boot diagnostics in debug builds
+
+`userdebug` and `eng` select kernel console `loglevel=7`, retaining warning,
+notice and informational messages, including init's kernel log. The common
+`user` configuration is unchanged. Pstore console retention additionally needs
+a registered backend with valid reserved memory; enabling its kernel config
+alone is not a successful retention test.
+
+Debug products enable the platform `logcatd` service after init's persistent
+property/data gate. It records main, system, crash, events and kernel buffers
+under `/data/misc/logd`: eight rotated 1 MiB files plus the active file, with
+possible record-size overshoot; this is rotation, not a disk quota. Existing
+persistent settings/files can change usage. Collect before changing build IDs:
+the platform logger can clear its previous files when the build ID changes. This cannot capture a failure that prevents `/data` availability.
+It does not weaken ADB authentication or SELinux enforcement.
+
+The Huawei image recipe places `BOARD_KERNEL_CMDLINE` in its kernel-bearing
+image. Rebuilding only `boot_ramdisk.img` does not apply that command-line change.
+Verify the final image header and observed `/proc/cmdline`, and retrieve pstore
+and Android logs during an approved experiment before claiming boot diagnostics
+work on the handset. Full Android logcat is not automatically mirrored to pmsg.
+
 SPDX-FileCopyrightText: The LineageOS Project
 
 SPDX-License-Identifier: Apache-2.0
