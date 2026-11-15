@@ -13,6 +13,10 @@ BOARD_SUPER_PARTITION_SIZE := 5771362304
 # Include the common OEM chipset BoardConfig.
 include device/huawei/kirin970-common/BoardConfigCommon.mk
 
+# Measured BLA .225 stock kernel AVB hash descriptor names the kernel partition.
+# This does not change signing, partition capacity or the separate ramdisk rules.
+BOARD_HUAWEI_KERNEL_AVB_PARTITION_NAME := kernel
+
 # Keep warning/notice/info messages in the console (including pstore when its
 # backend is registered) during bring-up. The inherited level 4 hides these.
 # This changes console filtering, not printk's ring buffer or ADB permissions.

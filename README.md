@@ -126,3 +126,17 @@ work on the handset. Full Android logcat is not automatically mirrored to pmsg.
 SPDX-FileCopyrightText: The LineageOS Project
 
 SPDX-License-Identifier: Apache-2.0
+
+## Kernel descriptor naming candidate
+
+BLA sets `BOARD_HUAWEI_KERNEL_AVB_PARTITION_NAME := kernel` for the Huawei
+kernel-bearing image recipe. The measured .225 stock AVB hash descriptor uses
+that name even though Android's build output is `boot.img`. This setting requires
+the matching hardware/huawei recipe support; it does not change signing, image
+capacity, partition layout or recovery/normal-ramdisk descriptors.
+
+`tests/test_boot_config.py` evaluates the actual BLA/common/vendor BoardConfig
+includes for user, userdebug and eng. The owning hardware tree's image-tool tests
+validate the actual recipe. Neither check establishes bootloader acceptance or
+recovery usability. The physical partition's stale tail/footer is not treated as
+proof of a reserved area, and no device operation is authorized by this candidate.
