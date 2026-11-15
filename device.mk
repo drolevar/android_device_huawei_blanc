@@ -6,6 +6,10 @@
 # Inherit from the common OEM chipset makefile.
 $(call inherit-product, device/huawei/kirin970-common/common.mk)
 
+# Current BLA .225 stock Android reports ro.product.first_api_level=26.
+# Override the common donor's launch API without changing its VNDK selection.
+PRODUCT_SHIPPING_API_LEVEL := 26
+
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi

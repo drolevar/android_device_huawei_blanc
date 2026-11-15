@@ -3,8 +3,21 @@
 These are offline observations from the owner's stock capture, reviewed on
 2026-11-14. Firmware files stay outside source control. Paths below are relative
 to the engineering workspace, not inputs shipped by this device repository.
-The owner identifies the running release as EMUI 12 `.225`; its complete
-displayed identity remains under investigation.
+The separately approved stock-Android reboot verifies
+`BLA-L29 12.0.0.225(C432E4R1P1)` in `ro.huawei.build.display.id`.
+
+## Product launch API
+
+Normal Android reports `ro.product.first_api_level=26`, SDK 29 and VNDK 29.
+The blanc product overrides the common donor's `PRODUCT_SHIPPING_API_LEVEL=29`
+with the measured **26**. The common `BOARD_SHIPPING_API_LEVEL` declaration is
+left separate; no measured stock board-first-API property is available.
+Current Android SDK, vendor VNDK selection, patch declarations and kernel
+interfaces are unchanged by this product identity correction.
+
+Private capture: `private/baselines/20261114-stock-android-final/properties.txt`,
+SHA-256 `54d3713bbf8ac5dcf6fa3e484ab31a9f0811ffe6296c2c4a4a42bca66ba1bc5b`.
+Use the real configured product values to validate inheritance after sync.
 
 ## Super capacity and ODM init
 
