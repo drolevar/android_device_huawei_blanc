@@ -72,6 +72,8 @@ From this device repository, with the selected extract-utils checkout supplied
 explicitly for an isolated worktree:
 
 ```sh
+ANDROID_BUILD_TOP=/absolute/android/root \
+BLA_TEST_CC=/absolute/android/root/prebuilts/clang/host/linux-x86/clang-r596125/bin/clang \
 PYTHONPATH=/absolute/android/root/tools/extract-utils python3 -B -m unittest discover -s tests -v
 ```
 
@@ -80,6 +82,24 @@ These tests use synthetic XML and host-built ELF fixtures. They require `cc`,
 handset or read proprietary firmware. They check XML repairs, generated media/NFC
 copy rules, media source priority, GPS module naming, default extraction policy
 and the retained native dependency replacements.
+
+The blanc product opts into Lineage's retained `libion: legacy_impl` because both
+measured BLA gralloc ABIs import `ion_open` and `ion_alloc_fd`; the platform's
+default provider exports failure stubs. This also selects the retained legacy
+BufferAllocator implementation. Its modern allocation overloads remain DMA-heap
+only; selecting ION is not a complete allocator migration or graphics verdict.
+
+The ION checks evaluate the selected platform's real Make macros against this
+product and compile the retained provider with link-wrapped open/ioctl/close.
+Fixtures cover the modern 24-byte allocation request, argument/FD preservation,
+open/allocation/close errors and null output. No real device is opened and no
+kernel ioctl is invoked. Set `BLA_ION_TEST_PROVIDER=ion.c` to reproduce the five
+failure-stub control failures. Without `ANDROID_BUILD_TOP`, these six checks are
+explicitly skipped. `BLA_ION_TEST_OUTPUT` optionally preserves the host binary
+and compiler/input receipt outside this source tree.
+
+Android ARM/ARM64 provider builds, linker namespaces, heap IDs/flags, protected
+buffers, Huawei IOMMU behavior, composer and display still need separate checks.
 
 SPDX-FileCopyrightText: The LineageOS Project
 

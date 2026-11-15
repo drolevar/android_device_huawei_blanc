@@ -18,6 +18,10 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 TARGET_SCREEN_HEIGHT := 2160
 TARGET_SCREEN_WIDTH := 1080
 
+# BLA gralloc requires ion_open/ion_alloc_fd; the platform default is a stub.
+# Select Lineage's real ION provider for this device's existing kernel allocator.
+$(call soong_config_set_bool,libion,legacy_impl,true)
+
 # Init
 PRODUCT_PACKAGES += \
     init.hisi.odm.rc
