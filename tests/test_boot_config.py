@@ -18,7 +18,9 @@ class KernelDescriptorConfigTest(unittest.TestCase):
                 source = (f"TARGET_BUILD_VARIANT := {variant}\n"
                           f"include {device / 'BoardConfig.mk'}\n"
                           "$(info descriptor=$(BOARD_HUAWEI_KERNEL_AVB_PARTITION_NAME))\n"
+                          "$(info ramdisk_descriptor=$(BOARD_HUAWEI_RAMDISK_AVB_PARTITION_NAME))\n"
                           "$(info capacity=$(BOARD_BOOTIMAGE_PARTITION_SIZE))\n"
+                          "$(info ramdisk_capacity=$(BOARD_BOOT_RAMDISKIMAGE_PARTITION_SIZE))\n"
                           "$(info header=$(BOARD_BOOT_HEADER_VERSION))\n"
                           "all:\n\t@:\n")
                 proc = subprocess.run(["make", "-rR", "-s", "-f", "-"],
@@ -27,7 +29,9 @@ class KernelDescriptorConfigTest(unittest.TestCase):
                 self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
                 values = dict(line.split("=", 1) for line in proc.stdout.splitlines() if "=" in line)
                 self.assertEqual(values["descriptor"], "kernel")
+                self.assertEqual(values["ramdisk_descriptor"], "ramdisk")
                 self.assertEqual(values["capacity"], "25165824")
+                self.assertEqual(values["ramdisk_capacity"], "2097152")
                 self.assertEqual(values["header"], "1")
 
 

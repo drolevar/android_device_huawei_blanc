@@ -127,13 +127,15 @@ SPDX-FileCopyrightText: The LineageOS Project
 
 SPDX-License-Identifier: Apache-2.0
 
-## Kernel descriptor naming candidate
+## Kernel and ramdisk descriptor naming candidates
 
 BLA sets `BOARD_HUAWEI_KERNEL_AVB_PARTITION_NAME := kernel` for the Huawei
-kernel-bearing image recipe. The measured .225 stock AVB hash descriptor uses
-that name even though Android's build output is `boot.img`. This setting requires
-the matching hardware/huawei recipe support; it does not change signing, image
-capacity, partition layout or recovery/normal-ramdisk descriptors.
+kernel-bearing image recipe and `BOARD_HUAWEI_RAMDISK_AVB_PARTITION_NAME := ramdisk`
+for the split normal ramdisk image recipe (`boot_ramdisk.img`). The measured .225
+stock AVB hash descriptors use those names even though Android's build outputs
+are `boot.img` and `boot_ramdisk.img`. These settings require matching
+`hardware/huawei` recipe support; they do not change signing, image capacities,
+partition layout or recovery descriptors.
 
 `tests/test_boot_config.py` evaluates the actual BLA/common/vendor BoardConfig
 includes for user, userdebug and eng. The owning hardware tree's image-tool tests

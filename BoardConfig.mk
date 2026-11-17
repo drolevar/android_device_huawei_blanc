@@ -16,6 +16,8 @@ include device/huawei/kirin970-common/BoardConfigCommon.mk
 # Measured BLA .225 stock kernel AVB hash descriptor names the kernel partition.
 # This does not change signing, partition capacity or the separate ramdisk rules.
 BOARD_HUAWEI_KERNEL_AVB_PARTITION_NAME := kernel
+# Measured BLA .225 stock ramdisk AVB hash descriptor names the ramdisk partition.
+BOARD_HUAWEI_RAMDISK_AVB_PARTITION_NAME := ramdisk
 
 # Keep warning/notice/info messages in the console (including pstore when its
 # backend is registered) during bring-up. The inherited level 4 hides these.
