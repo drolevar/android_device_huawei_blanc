@@ -14,6 +14,12 @@ $(call inherit-product, device/huawei/blanc/device.mk)
 # Inherit some common Lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
+# Bring-up diagnostics: keep userdebug debuggable with early root USB adbd.
+PRODUCT_NOT_DEBUGGABLE_IN_USERDEBUG := false
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    ro.adb.secure=0 \
+    persist.sys.usb.config=adb
+
 PRODUCT_NAME := lineage_blanc
 PRODUCT_DEVICE := blanc
 PRODUCT_MANUFACTURER := HUAWEI
