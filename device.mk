@@ -37,7 +37,8 @@ $(call soong_config_set_bool,libion,legacy_impl,true)
 # Init
 PRODUCT_PACKAGES += \
     init.hisi.odm.rc \
-    libshim_camera_tls
+    libshim_camera_tls \
+    libtinyxml2-v29
 
 # Keylayout
 PRODUCT_COPY_FILES += \
@@ -54,6 +55,12 @@ PRODUCT_SOONG_NAMESPACES += \
 # Sensors
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/android.hardware.sensor.unavailable.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/android.hardware.sensor.unavailable.xml
+
+# Telephony
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.telephony.cdma.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.cdma.xml \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.gsm.xml \
+    frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml
 
 # The product requires a reviewed BLA blob extraction; a missing vendor tree
 # must fail configuration instead of producing a silently incomplete product.

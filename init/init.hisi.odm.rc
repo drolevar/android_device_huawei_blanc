@@ -1,6 +1,5 @@
 on post-fs-data
-    mkdir /data/nfc
-    chown nfc nfc /data/nfc
+    mkdir /data/vendor/nfc 0770 nfc nfc
     mkdir /data/vendor/camera 0770 media camera
     mkdir /data/vendor/camera/img 0770 media camera
 

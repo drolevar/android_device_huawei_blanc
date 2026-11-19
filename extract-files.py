@@ -162,7 +162,15 @@ blob_fixups: blob_fixups_user_type = {
         'odm/lib64/libmrc_cg_beauty.so',
         'odm/lib64/libvidhance.so',
     ): blob_fixup()
-        .replace_needed('libstdc++.so', 'libstdc++_vendor.so')
+        .replace_needed('libstdc++.so', 'libstdc++_vendor.so'),
+    (
+        'odm/lib64/hwcam/hwcam.kirin970.BLANC.p.IMX319.so',
+        'odm/lib64/hwcam/hwcam.kirin970.BLANC.p.IMX386HYBIRD.so',
+        'odm/lib64/hwcam/hwcam.kirin970.BLANC.s.IMX319.so',
+        'odm/lib64/hwcam/hwcam.kirin970.BLANC.s.IMX386HYBIRD.so',
+        'odm/lib64/hwcam/hwcam.kirin970.m.BLANC.so',
+    ): blob_fixup()
+        .replace_needed('libtinyxml2.so', 'libtinyxml2-v29.so'),
 }  # fmt: skip
 
 module = ExtractUtilsModule(
