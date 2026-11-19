@@ -36,7 +36,8 @@ $(call soong_config_set_bool,libion,legacy_impl,true)
 
 # Init
 PRODUCT_PACKAGES += \
-    init.hisi.odm.rc
+    init.hisi.odm.rc \
+    libshim_camera_tls
 
 # Keylayout
 PRODUCT_COPY_FILES += \

@@ -1,6 +1,8 @@
 on post-fs-data
     mkdir /data/nfc
     chown nfc nfc /data/nfc
+    mkdir /data/vendor/camera 0770 media camera
+    mkdir /data/vendor/camera/img 0770 media camera
 
 on boot
 # add for multi scale
@@ -85,4 +87,5 @@ service CameraDaemon /vendor/bin/CameraDaemon kirin970 BLANC
     group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm system
     ioprio rt 4
     capabilities SYS_NICE
+    setenv LD_PRELOAD /vendor/lib64/libshim_camera_tls.so
     writepid /dev/cpuset/top-app/tasks /dev/stune/top-app/tasks
