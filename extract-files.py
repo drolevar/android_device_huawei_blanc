@@ -168,9 +168,11 @@ blob_fixups: blob_fixups_user_type = {
         'odm/lib64/hwcam/hwcam.kirin970.BLANC.p.IMX386HYBIRD.so',
         'odm/lib64/hwcam/hwcam.kirin970.BLANC.s.IMX319.so',
         'odm/lib64/hwcam/hwcam.kirin970.BLANC.s.IMX386HYBIRD.so',
-        'odm/lib64/hwcam/hwcam.kirin970.m.BLANC.so',
     ): blob_fixup()
         .replace_needed('libtinyxml2.so', 'libtinyxml2-v29.so'),
+    'odm/lib64/hwcam/hwcam.kirin970.m.BLANC.so': blob_fixup()
+        .replace_needed('libtinyxml2.so', 'libtinyxml2-v29.so')
+        .patch_file('fixups/camera_metadata_undef.py', need_tmp_dir=False),
 }  # fmt: skip
 
 module = ExtractUtilsModule(
