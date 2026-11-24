@@ -37,5 +37,11 @@ ODM_MANIFEST_SKUS := \
 ODM_MANIFEST_BLA-L09_FILES := $(DEVICE_PATH)/odm/manifest_BLA-L09.xml
 ODM_MANIFEST_BLA-L29_FILES := $(DEVICE_PATH)/odm/manifest_BLA-L29.xml
 
+# Wi-Fi (BCM4359 STA / SoftAP firmware reload paths from /proc/device-tree/bcm_wifi)
+WIFI_DRIVER_FW_PATH_PARAM := "/sys/module/bcmdhd/parameters/firmware_path"
+WIFI_DRIVER_FW_PATH_STA := "/vendor/firmware/fw_bcm4359_hw.bin"
+WIFI_DRIVER_FW_PATH_AP := "/vendor/firmware/fw_bcm4359_apsta_hw.bin"
+WIFI_DRIVER_FW_PATH_P2P := "/vendor/firmware/fw_bcm4359_hw.bin"
+
 # Require the proprietary files BoardConfig from the reviewed BLA extraction.
 include vendor/huawei/blanc/BoardConfigVendor.mk
