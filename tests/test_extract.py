@@ -3,12 +3,15 @@
 
 """Host fixtures only; put the selected tools/extract-utils on PYTHONPATH."""
 
+import hashlib
+import importlib.util
 import io
 from pathlib import Path
 import runpy
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 import xml.etree.ElementTree as ET
 
 from extract_utils.file import File, FileList
@@ -145,6 +148,56 @@ class ExtractionTest(unittest.TestCase):
                 except SystemExit:
                     blocked.append(file.dst)
         self.assertEqual(blocked, [])
+
+    def test_xml_and_camera_fixups_are_idempotent(self):
+        xml_fixtures = {
+            'odm/etc/camera/davinci/imx386dual/imgproc.xml': (
+                b'<?xml version="1.0" encoding="GB2312"?>'
+                b'<camera><!-- bad L-R-Ev comment --><value>\xe9</value></camera>'
+            ),
+            'odm/etc/camera/hdccalib/hw_calib_setting.xml': (
+                b'<?xml version="1.0"?><camera><value>\xe9</value></camera>'
+            ),
+            'odm/etc/display/effect/algorithm/hdr_engine.xml': (
+                b'<?xml version="1.0" encoding="gb2312"?>'
+                b'<hdr><subversion>1</subverison><!-- default --->'
+                b'<!-- default-><!-- outdoor-></hdr>'
+            ),
+        }
+        for name, fixture in xml_fixtures.items():
+            with self.subTest(name=name):
+                first = self.apply_fixup(name, fixture)
+                second = self.apply_fixup(name, first)
+                self.assertEqual(first, second)
+
+        import struct
+        spec = importlib.util.spec_from_file_location('blanc_cam_undef', DEVICE / 'fixups/camera_metadata_undef.py')
+        cam = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cam)
+        dynstr = b'\x00camera_metadata_section_bounds\x00camera_metadata_section_names\x00'
+        dynsym = struct.pack('<IBBHQQ', 0, 0, 0, 0, 0, 0)
+        dynsym += struct.pack('<IBBHQQ', 1, 0x11, 0, 11, 0x2d540, 256)
+        dynsym += struct.pack('<IBBHQQ', 32, 0x11, 0, 11, 0x2d440, 256)
+        sh_off = 64 + len(dynstr) + len(dynsym)
+        ehdr = bytearray(64)
+        ehdr[:6] = b'\x7fELF\x02\x01'
+        ehdr[18:20] = b'\xb7\x00'
+        struct.pack_into('<Q', ehdr, 40, sh_off)
+        struct.pack_into('<HH', ehdr, 58, 64, 3)
+        cam_in = (
+            bytes(ehdr)
+            + dynstr
+            + dynsym
+            + bytes(64)
+            + struct.pack('<IIQQQQIIQQ', 0, 3, 2, 0, 64, len(dynstr), 0, 0, 1, 0)
+            + struct.pack('<IIQQQQIIQQ', 0, 11, 2, 0, 64 + len(dynstr), len(dynsym), 1, 1, 8, 24)
+        )
+        with mock.patch.object(cam, 'EXPECTED_SHA256', hashlib.sha256(cam_in).hexdigest()):
+            cam_out = cam.patch_camera_metadata_undef(cam_in)
+        with mock.patch.object(cam, 'EXPECTED_OUTPUT_SHA256', hashlib.sha256(cam_out).hexdigest()):
+            self.assertEqual(cam.patch_camera_metadata_undef(cam_out), cam_out)
+        with self.assertRaisesRegex(ValueError, 'SHA-256'):
+            cam.patch_camera_metadata_undef(cam_out + b'\x00')
 
 
 if __name__ == '__main__':
