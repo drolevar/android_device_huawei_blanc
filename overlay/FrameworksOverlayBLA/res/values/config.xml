@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Enable software automatic brightness driven by ROHM BH1745 ambient light sensor.
+         Curve points match stock EMUI 12 .225 hw_product/etc/xml/lcd/LABCConfig.xml. -->
+    <bool name="config_automatic_brightness_available">true</bool>
+
+    <!-- Backlight setting bounds [1..255] matching stock LABCConfig.xml ManualBrightnessMinLimit
+         and DefaultBrightness (Float equivalents remain -2 in framework to use these ints). -->
+    <integer name="config_screenBrightnessSettingMinimum">4</integer>
+    <integer name="config_screenBrightnessSettingDefault">100</integer>
+    <integer name="config_screenBrightnessSettingMaximum">255</integer>
+
+    <!-- Light sensor debounce intervals (ms) matching stock BrightenDebounceTime (1000 ms)
+         and smooth indoor/outdoor darkening transition (4000 ms). -->
+    <integer name="config_autoBrightnessBrighteningLightDebounce">1000</integer>
+    <integer name="config_autoBrightnessDarkeningLightDebounce">4000</integer>
+
+    <!-- N = 6 lux thresholds defining N + 1 = 7 control points [0, 25, 1000, 3000, 4000, 10000, 40000]. -->
+    <integer-array name="config_autoBrightnessLevels">
+        <item>25</item>
+        <item>1000</item>
+        <item>3000</item>
+        <item>4000</item>
+        <item>10000</item>
+        <item>40000</item>
+    </integer-array>
+
+    <!-- N + 1 = 7 LCD backlight values [1..255] from stock LABCConfig.xml DefaultBrightnessPoints. -->
+    <integer-array name="config_autoBrightnessLcdBacklightValues">
+        <item>5</item>
+        <item>35</item>
+        <item>92</item>
+        <item>141</item>
+        <item>165</item>
+        <item>180</item>
+        <item>255</item>
+    </integer-array>
+</resources>
