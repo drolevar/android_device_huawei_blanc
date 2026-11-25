@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Expose [1x | 2x] quick-zoom pills on rear Camera "0" so unmodified
+         Aperture switches cleanly between 1x colorfusion (dualSensorMode=3)
+         and 2x native 20 MP opticalzoomnornal (opticalZoomMode=1). -->
+    <string-array name="config_logicalZoomRatios">
+        <item>0</item>
+        <item>2.0</item>
+        <item>2.0</item>
+    </string-array>
+</resources>

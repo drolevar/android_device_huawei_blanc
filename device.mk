@@ -34,9 +34,19 @@ TARGET_SCREEN_WIDTH := 1080
 # Select Lineage's real ION provider for this device's existing kernel allocator.
 $(call soong_config_set_bool,libion,legacy_impl,true)
 
-# Init
+# Camera (Huawei .225 service interposer, CameraX Basic Extensions, Aperture 1x/2x RRO)
+PRODUCT_SYSTEM_PROPERTIES += \
+    ro.camerax.extensions.enabled=true
+
+DEVICE_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay-lineage
+
+# Init & Camera
 PRODUCT_PACKAGES += \
     init.hisi.odm.rc \
+    hicam.hal.service \
+    androidx.camera.extensions.impl \
+    huawei_blanc_camera_extensions.xml \
     libshim_camera_tls \
     libtinyxml2-v29
 
