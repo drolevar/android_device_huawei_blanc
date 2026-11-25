@@ -45,7 +45,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 PRODUCT_PACKAGES += \
     init.hisi.odm.rc \
     hicam.hal.service \
-    androidx.camera.extensions.impl \
+    androidx.camera.extensions.impl.blanc \
     huawei_blanc_camera_extensions.xml \
     libshim_camera_tls \
     libtinyxml2-v29
