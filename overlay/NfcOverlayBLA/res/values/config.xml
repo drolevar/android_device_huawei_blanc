@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Allow CameraServiceProxy (ro.camera.notify_nfc=1) to pause PN551 reader
+         polling while a camera is active so 13.56 MHz NFC discovery pulses do not
+         couple into the front IMX319 sensor in low light (HCE listen mode stays on). -->
+    <bool name="polling_disable_allowed">true</bool>
+</resources>

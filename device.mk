@@ -38,6 +38,9 @@ $(call soong_config_set_bool,libion,legacy_impl,true)
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.camerax.extensions.enabled=true
 
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.camera.notify_nfc=1
+
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay-lineage
 
@@ -56,7 +59,8 @@ PRODUCT_COPY_FILES += \
 
 # Overlay
 PRODUCT_PACKAGES += \
-    FrameworksOverlayBLA
+    FrameworksOverlayBLA \
+    NfcOverlayBLA
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
